@@ -13,6 +13,7 @@ const trustItems = [
 
 function AnimatedCounter({ target, suffix, decimals = 0 }) {
     const ref = useRef(null);
+    const wrapRef = useRef(null);
     const [count, setCount] = useState(0);
 
     useEffect(() => {
@@ -28,12 +29,44 @@ function AnimatedCounter({ target, suffix, decimals = 0 }) {
             },
             onUpdate: () => {
                 setCount(decimals > 0 ? obj.val.toFixed(decimals) : Math.round(obj.val));
+            },
+            onComplete: () => {
+                // Trigger underline bar animation once counter finishes
+                if (wrapRef.current) {
+                    wrapRef.current.classList.add('bar-visible');
+                }
             }
         });
-        return () => tween.kill();
+
+        // Also observe for the bar via IntersectionObserver as a fallback
+        const io = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && wrapRef.current) {
+                        setTimeout(() => wrapRef.current?.classList.add('bar-visible'), 400);
+                        io.disconnect();
+                    }
+                });
+            },
+            { threshold: 0.5 }
+        );
+        if (ref.current) io.observe(ref.current);
+
+        return () => {
+            tween.kill();
+            io.disconnect();
+        };
     }, [target, decimals]);
 
-    return <span ref={ref}>{count}{suffix}</span>;
+    return (
+        <span
+            ref={wrapRef}
+            className="counter-bar text-glow-accent font-sans font-bold text-white tracking-tighter group-hover:text-accent transition-colors duration-500"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
+        >
+            <span ref={ref}>{count}</span>{suffix}
+        </span>
+    );
 }
 
 export default function GlobalTrust() {
@@ -53,21 +86,23 @@ export default function GlobalTrust() {
     }, []);
 
     return (
-        <div ref={sectionRef} className="w-full py-16 px-8 border-y border-white/[0.04] bg-[#050508]/50 backdrop-blur-sm relative z-20">
+        <div ref={sectionRef} className="w-full py-16 px-8 border-y border-white/[0.04] bg-[#080c10]/50 backdrop-blur-sm relative z-20">
             <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
 
                 <div className="trust-item flex items-center gap-3 text-accent/70 shrink-0 md:border-r md:border-white/10 md:pr-12">
-                    <div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_#14b8a6]" />
+                    <div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_8px_#00e5c3]" />
                     <span className="font-sans text-[10px] uppercase tracking-[0.2em] font-semibold">Trusted Worldwide</span>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-16 w-full justify-items-center md:justify-items-start">
                     {trustItems.map((item, i) => (
                         <div key={i} className="trust-item flex flex-col items-center md:items-start text-center md:text-left gap-1 group">
-                            <span className="font-sans font-bold text-4xl md:text-5xl text-white tracking-tighter group-hover:text-accent transition-colors duration-500">
-                                <AnimatedCounter target={item.value} suffix={item.suffix} decimals={item.value % 1 !== 0 ? 1 : 0} />
-                            </span>
-                            <span className="font-sans text-[10px] uppercase tracking-[0.15em] text-[#64748B] mt-1">
+                            <AnimatedCounter
+                                target={item.value}
+                                suffix={item.suffix}
+                                decimals={item.value % 1 !== 0 ? 1 : 0}
+                            />
+                            <span className="font-sans text-[10px] uppercase tracking-[0.15em] text-[#64748B] mt-3">
                                 {item.label}
                             </span>
                         </div>

@@ -57,8 +57,8 @@ export default function Features() {
 
                 <div className="feat-list w-full lg:w-2/3 flex flex-col gap-4">
                     {advantages.map((adv, i) => (
-                        <div key={i} className="feat-card group bg-[#0b0d12] p-7 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-5 border border-white/[0.04] hover:border-accent/20 hover:bg-[#0f1118] transition-all duration-300">
-                            <div className="w-12 h-12 rounded-xl bg-accent/[0.06] border border-accent/15 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(20,184,166,0.08)] group-hover:shadow-[0_0_20px_rgba(20,184,166,0.25)] transition-all">
+                        <div key={i} className="feat-card group bg-[#0b0d12] p-7 rounded-2xl flex flex-col md:flex-row items-start md:items-center gap-5 border border-white/[0.04] hover:border-accent/25 hover:bg-[#0f1118] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,229,195,0.08)] transition-all duration-300" style={{ transitionTimingFunction: 'cubic-bezier(0.25,0.46,0.45,0.94)', borderLeft: undefined }} onMouseEnter={e => e.currentTarget.style.borderLeft = '3px solid rgba(0,229,195,0.7)'} onMouseLeave={e => e.currentTarget.style.borderLeft = ''}>
+                            <div className="w-12 h-12 rounded-xl bg-accent/[0.06] border border-accent/15 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(0,229,195,0.08)] group-hover:shadow-[0_0_20px_rgba(0,229,195,0.25)] transition-all">
                                 {adv.icon}
                             </div>
                             <div>

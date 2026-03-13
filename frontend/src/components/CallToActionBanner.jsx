@@ -42,7 +42,7 @@ export default function CallToActionBanner() {
 
                     <div className="relative z-10 w-full md:w-auto">
                         <Link to="/contact">
-                            <button className="group w-full md:w-auto px-8 py-4 rounded-xl bg-accent text-[#050508] font-sans font-bold text-sm hover:bg-white transition-colors duration-300 shadow-[0_0_30px_rgba(20,184,166,0.3)] flex items-center gap-3 justify-center">
+                            <button className="btn-shimmer group w-full md:w-auto px-8 py-4 rounded-xl bg-accent text-[#080c10] font-sans font-bold text-sm hover:brightness-110 hover:scale-[1.03] hover:shadow-[0_0_30px_rgba(0,229,195,0.45)] transition-all duration-300 shadow-[0_0_25px_rgba(0,229,195,0.25)] flex items-center gap-3 justify-center">
                                 Start Your Project
                                 <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                             </button>

@@ -101,13 +101,22 @@ export default function Navbar() {
                 className={cn(
                     "navbar-container fixed top-0 left-0 w-full z-[100] px-8 py-4 flex items-center justify-between transition-all duration-500",
                     scrolled
-                        ? "bg-dark/95 backdrop-blur-xl border-b border-white/[0.03] shadow-md"
+                        ? "bg-dark/95 backdrop-blur-xl shadow-md"
                         : "bg-transparent text-primary"
                 )}
             >
+                {/* Gradient border bottom — fades transparent→teal→transparent */}
+                <div
+                    className="absolute bottom-0 left-0 w-full h-px pointer-events-none"
+                    style={{
+                        background: 'linear-gradient(90deg, transparent 0%, #00e5c3 50%, transparent 100%)',
+                        opacity: scrolled ? 1 : 0,
+                        transition: 'opacity 0.5s ease',
+                    }}
+                />
                 <Link to="/" className="flex items-center gap-3 font-sans text-xl tracking-tight z-10 w-[200px] group">
                     <div className="w-8 h-8 rounded-full bg-accent/10 border border-accent/40 flex items-center justify-center relative overflow-hidden shrink-0 group-hover:bg-accent/20 transition-colors">
-                        <div className="w-3 h-3 rounded-full bg-accent animate-pulse shadow-[0_0_15px_#14b8a6]" />
+                        <div className="w-3 h-3 rounded-full bg-accent animate-pulse shadow-[0_0_15px_#00e5c3]" />
                         <div className="absolute inset-0 border border-accent rounded-full animate-[spin_4s_linear_infinite] border-t-transparent" />
                     </div>
                     <div className="flex flex-col leading-none">
@@ -129,11 +138,11 @@ export default function Navbar() {
 
                 {/* Desktop Consultation Button */}
                 <div className="hidden lg:flex items-center justify-end w-[200px] z-10">
-                    <Link to="/contact" className="flex items-center gap-2 group">
-                        <span className="text-xs uppercase tracking-widest text-primary group-hover:text-accent transition-colors">Consultation</span>
-                        <div className="w-6 h-6 rounded flex items-center justify-center bg-white/[0.05] border border-white/[0.1] group-hover:bg-accent/20 group-hover:border-accent/40 transition-all">
-                            <span className="text-accent text-[10px]">▼</span>
-                        </div>
+                    <Link
+                        to="/contact"
+                        className="btn-shimmer px-5 py-2 rounded border border-accent/50 text-accent text-xs uppercase tracking-widest font-medium hover:bg-accent hover:text-[#080c10] hover:border-accent hover:shadow-[0_0_20px_rgba(0,229,195,0.35)] transition-all duration-300"
+                    >
+                        Consultation
                     </Link>
                 </div>
 
