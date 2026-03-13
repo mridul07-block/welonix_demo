@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-primary antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  @media (min-width: 1024px) {
+    body {
+      cursor: none;
+    }
+
+    a,
+    button,
+    input,
+    textarea,
+    select {
+      cursor: none;
+    }
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05];
+  }
+
+  .glass-panel-light {
+    @apply bg-white/[0.04] backdrop-blur-lg border border-white/[0.08];
+  }
+}
+
+/* Subtle glowing line used for timelines and separators */
+.glow-line {
+  background: linear-gradient(90deg, transparent, rgba(20, 184, 166, 0.4), transparent);
+  height: 1px;
+  width: 100%;
+}
+
+/* Base interactive button from F11CLUB */
+.magnetic-btn {
+  @apply relative overflow-hidden transition-all duration-300;
+}
+
+.magnetic-btn:hover {
+  transform: scale(1.03);
+}
+
+.magnetic-btn-inner {
+  @apply absolute inset-0 bg-accent translate-y-[101%] transition-transform duration-300;
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.magnetic-btn:hover .magnetic-btn-inner {
+  @apply translate-y-0;
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050508;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1f2937;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #14b8a6;
+}
