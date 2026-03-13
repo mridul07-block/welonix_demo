@@ -6,6 +6,7 @@
   body {
     @apply bg-background text-primary antialiased;
     font-family: 'Inter', sans-serif;
+    background-color: #07090d;
   }
 
   @media (min-width: 1024px) {
@@ -33,14 +34,106 @@
   }
 }
 
-/* Subtle glowing line used for timelines and separators */
+/* ─── Gradient text ──────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff 30%, #00e5c3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-blue {
+  background: linear-gradient(135deg, #ffffff 20%, #0094ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glow line used for separators ─────────────── */
 .glow-line {
   background: linear-gradient(90deg, transparent, rgba(0, 229, 195, 0.4), transparent);
   height: 1px;
   width: 100%;
 }
 
-/* Base interactive button from F11CLUB */
+/* ─── Section divider with gradient ─────────────── */
+.glow-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 195, 0.3), rgba(0, 148, 255, 0.15), transparent);
+}
+
+/* ─── Animated spinning border ───────────────────── */
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.animated-border {
+  position: relative;
+}
+
+.animated-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--border-angle), transparent 25%, #00e5c3 50%, transparent 75%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: destination-out;
+  opacity: 0;
+  transition: opacity 0.3s;
+  animation: border-spin 3s linear infinite paused;
+  pointer-events: none;
+}
+
+.animated-border:hover::before {
+  opacity: 1;
+  animation-play-state: running;
+}
+
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
+
+/* ─── Stat number glow pulse ─────────────────────── */
+.stat-glow {
+  animation: stat-pulse 3s ease-in-out infinite;
+}
+
+@keyframes stat-pulse {
+  0%, 100% { text-shadow: 0 0 20px rgba(0, 229, 195, 0.2); }
+  50%       { text-shadow: 0 0 60px rgba(0, 229, 195, 0.6), 0 0 120px rgba(0, 229, 195, 0.15); }
+}
+
+/* ─── Animated gradient underline bar ───────────── */
+.stat-line {
+  display: block;
+  height: 2px;
+  background: linear-gradient(90deg, #00e5c3, #0094ff);
+  width: 0;
+  border-radius: 1px;
+  transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+
+.stat-line.line-visible {
+  width: 100%;
+}
+
+/* ─── 3D card tilt ───────────────────────────────── */
+.card-3d {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ─── Magnetic button ────────────────────────────── */
+.magnetic {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ─── Base interactive button ────────────────────── */
 .magnetic-btn {
   @apply relative overflow-hidden transition-all duration-300;
 }
@@ -58,25 +151,25 @@
   @apply translate-y-0;
 }
 
-/* ─── Scrollbar ─────────────────────────────────────── */
+/* ─── Scrollbar ──────────────────────────────────── */
 ::-webkit-scrollbar {
   width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080c10;
+  background: #07090d;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #00e5c3;
+  background: linear-gradient(180deg, #00e5c3, #0094ff);
   border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00e5c3cc;
+  background: #00e5c3;
 }
 
-/* ─── Shimmer button sweep ──────────────────────────── */
+/* ─── Shimmer button sweep ───────────────────────── */
 .btn-shimmer {
   position: relative;
   overflow: hidden;
@@ -99,7 +192,31 @@
   left: 150%;
 }
 
-/* ─── Counter stat underline bar ────────────────────── */
+/* ─── Card shimmer sweep ─────────────────────────── */
+.card-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.035), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-shimmer:hover::after {
+  left: 130%;
+}
+
+/* ─── Counter stat underline bar ─────────────────── */
 .counter-bar {
   position: relative;
   display: inline-block;
@@ -112,7 +229,7 @@
   left: 0;
   height: 2px;
   width: 0;
-  background: #00e5c3;
+  background: linear-gradient(90deg, #00e5c3, #0094ff);
   transition: width 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
   border-radius: 1px;
 }
@@ -121,12 +238,41 @@
   width: 100%;
 }
 
-/* ─── Glow text for stat numbers ────────────────────── */
+/* ─── Glow text for stat numbers ─────────────────── */
 .text-glow-accent {
   text-shadow: 0 0 40px rgba(0, 229, 195, 0.3);
 }
 
-/* ─── data-animate fade-up pattern ─────────────────── */
+/* ─── Teal ripple on bullet dots ─────────────────── */
+@keyframes ripple {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 229, 195, 0.5); }
+  100% { box-shadow: 0 0 0 14px rgba(0, 229, 195, 0); }
+}
+
+.dot-ripple {
+  animation: ripple 2s ease-out infinite;
+}
+
+/* ─── Orbit ring animation ───────────────────────── */
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(70px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(70px) rotate(-360deg); }
+}
+
+@keyframes orbit-reverse {
+  from { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+  to   { transform: rotate(-360deg) translateX(90px) rotate(360deg); }
+}
+
+.orbit-dot {
+  animation: orbit 6s linear infinite;
+}
+
+.orbit-dot-reverse {
+  animation: orbit-reverse 9s linear infinite;
+}
+
+/* ─── data-animate fade-up pattern ──────────────── */
 [data-animate] {
   opacity: 0;
   transform: translateY(30px);
@@ -139,7 +285,6 @@
   transform: none;
 }
 
-/* Stagger children 0.1s increments */
 [data-animate]:nth-child(1) { transition-delay: 0s; }
 [data-animate]:nth-child(2) { transition-delay: 0.1s; }
 [data-animate]:nth-child(3) { transition-delay: 0.2s; }
@@ -147,7 +292,7 @@
 [data-animate]:nth-child(5) { transition-delay: 0.4s; }
 [data-animate]:nth-child(6) { transition-delay: 0.5s; }
 
-/* ─── Floating orb keyframe ─────────────────────────── */
+/* ─── Floating orb keyframe ──────────────────────── */
 @keyframes float-orb {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33%       { transform: translate(30px, -20px) scale(1.05); }
@@ -159,7 +304,43 @@
   will-change: transform;
 }
 
-/* ─── Prefers-reduced-motion ────────────────────────── */
+/* ─── Gradient CTA button ────────────────────────── */
+.btn-gradient {
+  background: linear-gradient(135deg, #00e5c3 0%, #0094ff 100%);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.btn-gradient:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(0, 229, 195, 0.3);
+}
+
+/* ─── Card glow on hover ─────────────────────────── */
+.card-glow:hover {
+  box-shadow: 0 0 40px rgba(0, 229, 195, 0.08), 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Progress bar for form submit ──────────────── */
+.progress-fill {
+  width: 0%;
+  transition: width 2s ease;
+}
+
+.progress-fill.filling {
+  width: 100%;
+}
+
+/* ─── Hide page chrome while preloader is active ─── */
+html[data-preloading] .navbar-container,
+html[data-preloading] canvas,
+html[data-preloading] footer {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ─── Prefers-reduced-motion ─────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

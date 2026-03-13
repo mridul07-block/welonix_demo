@@ -17,23 +17,35 @@ export default function Workflow() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
+
             // Heading
             gsap.fromTo('.wf-heading',
-                { x: -40, opacity: 0 },
+                { y: 50, opacity: 0 },
                 {
-                    x: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
+                    y: 0, opacity: 1, duration: 0.9, ease: 'power3.out',
                     scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' }
                 }
             );
-            // Steps slide in from left sequentially
-            gsap.fromTo('.wf-step',
-                { x: -60, opacity: 0 },
+
+            // Icons 3D flip on entry
+            gsap.fromTo('.wf-icon',
+                { rotateY: 180, opacity: 0 },
                 {
-                    x: 0, opacity: 1, duration: 0.7, stagger: 0.2, ease: 'power3.out',
-                    scrollTrigger: { trigger: '.wf-steps', start: 'top 80%' }
+                    rotateY: 0, opacity: 1, duration: 0.7, stagger: 0.2, ease: 'power3.out',
+                    scrollTrigger: { trigger: '.wf-steps', start: 'top 82%' }
                 }
             );
-            // SVG connecting line draws itself
+
+            // Step content slides up after icon
+            gsap.fromTo('.wf-content',
+                { y: 30, opacity: 0 },
+                {
+                    y: 0, opacity: 1, duration: 0.6, stagger: 0.2, delay: 0.2, ease: 'power3.out',
+                    scrollTrigger: { trigger: '.wf-steps', start: 'top 82%' }
+                }
+            );
+
+            // SVG line draws itself
             gsap.fromTo('.wf-line',
                 { strokeDashoffset: 600 },
                 {
@@ -41,42 +53,61 @@ export default function Workflow() {
                     scrollTrigger: { trigger: '.wf-steps', start: 'top 80%' }
                 }
             );
+
         }, sectionRef);
         return () => ctx.revert();
     }, []);
 
     return (
-        <div ref={sectionRef} className="w-full py-28 px-8 border-t border-white/[0.03] bg-[#030305]">
+        <section ref={sectionRef} className="w-full py-28 px-8 relative" style={{ borderTop: '1px solid rgba(255,255,255,0.04)', background: '#0a0d14' }}>
+
+            <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 50% 60% at 50% 50%, rgba(0,148,255,0.03) 0%, transparent 70%)' }} />
+
             <div className="max-w-7xl mx-auto">
 
                 <div className="wf-heading flex flex-col md:flex-row items-start md:items-end justify-between mb-20 gap-8">
                     <div>
-                        <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-accent/60 font-medium mb-4">How It Works</p>
-                        <h2 className="font-sans font-bold text-4xl md:text-5xl text-white leading-[1.1] tracking-tight">
-                            Streamlined <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-cyan-400">Process</span>
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border mb-6" style={{ borderColor: 'rgba(0,229,195,0.15)', background: 'rgba(0,229,195,0.03)' }}>
+                            <div className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+                            <span className="font-sans text-[10px] uppercase tracking-[0.2em] font-medium" style={{ color: 'rgba(0,229,195,0.7)' }}>How It Works</span>
+                        </div>
+                        <h2 className="font-sans font-black text-4xl md:text-5xl text-white leading-tight tracking-tight">
+                            Streamlined <span className="gradient-text">Process</span>
                         </h2>
                     </div>
-                    <p className="font-sans text-[#64748B] max-w-md text-sm leading-relaxed">
+                    <p className="font-sans text-sm leading-relaxed max-w-md" style={{ color: '#8892a4' }}>
                         Our localization methodology is built for speed and precision, ensuring your content reaches global markets flawlessly.
                     </p>
                 </div>
 
                 <div className="wf-steps grid grid-cols-1 md:grid-cols-4 gap-0 relative">
-                    {/* SVG Connecting Line (Desktop) */}
-                    <svg className="hidden md:block absolute top-[28px] left-[7%] right-[7%] h-[2px] z-0 overflow-visible" style={{ width: '86%' }}>
-                        <line x1="0" y1="1" x2="100%" y2="1" className="wf-line" stroke="rgba(20,184,166,0.25)" strokeWidth="2" strokeDasharray="600" strokeDashoffset="600" />
+                    {/* SVG Connecting Line */}
+                    <svg className="hidden md:block absolute top-[32px] left-[7%] h-[2px] z-0 overflow-visible" style={{ width: '86%' }}>
+                        <line x1="0" y1="1" x2="100%" y2="1" className="wf-line"
+                            stroke="url(#lineGrad)" strokeWidth="1.5"
+                            strokeDasharray="600" strokeDashoffset="600" />
+                        <defs>
+                            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#00e5c3" stopOpacity="0.4" />
+                                <stop offset="100%" stopColor="#0094ff" stopOpacity="0.2" />
+                            </linearGradient>
+                        </defs>
                     </svg>
 
                     {steps.map((step, i) => (
-                        <div key={i} className="wf-step relative z-10 flex flex-col items-center md:items-start text-center md:text-left gap-5 group p-4">
-                            <div className="w-14 h-14 rounded-full bg-[#0b0d12] border-2 border-white/[0.06] flex items-center justify-center text-accent shadow-[0_4px_25px_rgba(0,0,0,0.6)] group-hover:border-accent/40 group-hover:shadow-[0_0_25px_rgba(20,184,166,0.25)] transition-all duration-500">
+                        <div key={i} className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left gap-5 group p-4">
+
+                            {/* Icon with 3D flip */}
+                            <div className="wf-icon w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:shadow-glow-sm" style={{ background: 'rgba(0,229,195,0.07)', border: '1px solid rgba(0,229,195,0.15)', color: '#00e5c3', transformStyle: 'preserve-3d' }}>
                                 {step.icon}
+                                {/* Pulsing ring on hover */}
+                                <div className="absolute inset-0 rounded-2xl border border-accent opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-500" />
                             </div>
 
-                            <div className="flex flex-col gap-2">
-                                <span className="font-mono text-[10px] text-accent/50 tracking-[0.2em] uppercase">Step {step.num}</span>
-                                <h3 className="font-sans font-bold text-lg text-white">{step.title}</h3>
-                                <p className="font-sans text-sm text-[#64748B] leading-relaxed">
+                            <div className="wf-content flex flex-col gap-2">
+                                <span className="font-mono text-[10px] uppercase tracking-[0.25em]" style={{ color: 'rgba(0,229,195,0.5)' }}>Step {step.num}</span>
+                                <h3 className="font-sans font-bold text-lg text-white group-hover:text-accent transition-colors duration-300">{step.title}</h3>
+                                <p className="font-sans text-sm leading-relaxed" style={{ color: '#8892a4' }}>
                                     {step.desc}
                                 </p>
                             </div>
@@ -85,6 +116,6 @@ export default function Workflow() {
                 </div>
 
             </div>
-        </div>
+        </section>
     );
 }

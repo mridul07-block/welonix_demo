@@ -5,13 +5,15 @@ export default function Preloader() {
     const [complete, setComplete] = useState(false);
 
     useEffect(() => {
-        // Disable scrolling while preloader is active
+        // Disable scrolling + hide navbar/canvas behind preloader
         document.body.style.overflow = 'hidden';
+        document.documentElement.setAttribute('data-preloading', 'true');
 
         const tl = gsap.timeline({
             onComplete: () => {
                 setComplete(true);
-                document.body.style.overflow = 'auto'; // Re-enable scrolling
+                document.body.style.overflow = 'auto';
+                document.documentElement.removeAttribute('data-preloading');
             }
         });
 
@@ -39,7 +41,7 @@ export default function Preloader() {
     if (complete) return null;
 
     return (
-        <div className="preloader-container fixed inset-0 z-[999] bg-[#050508] flex items-center justify-center">
+        <div className="preloader-container fixed inset-0 z-[9999] flex items-center justify-center" style={{ background: '#07090d' }}>
             <div className="relative flex items-center justify-center preloader-logo opacity-0">
 
                 {/* Orbit Ring */}
